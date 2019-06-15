@@ -10,11 +10,10 @@ import java.util.List;
 
 //如果有一个类带了@Service注解，将自动注册到Spring容器，不需要再在applicationContext里面定义bean了
 @Service
-public class StudentServiceImpl  implements StudentService {
+public class StudentServiceImpl implements StudentService {
     //Autowired:把配置好的Bean拿来用，完成属性、方法的组装
     @Autowired
     private StudentMapper studentMapper;
-
 
 
     @Override
@@ -39,6 +38,6 @@ public class StudentServiceImpl  implements StudentService {
 
     @Override
     public int update(Integer id, Student student) {
-        return studentMapper.update(id,student);
+        return studentMapper.update(id, student);
     }
 }

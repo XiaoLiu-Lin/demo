@@ -57,18 +57,18 @@ public class JedisUtil {
         JedisPoolConfig config = new JedisPoolConfig();
         //控制一个pool可分配多少个jedis实例，通过pool.getResource()来获取；
         //如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)。
-        config.setMaxTotal (1200);
+        config.setMaxTotal(1200);
         //控制一个pool最多有多少个状态为idle(空闲的)的jedis实例。
-        config.setMaxIdle (400);
+        config.setMaxIdle(400);
         //表示当borrow(引入)一个jedis实例时，最大的等待时间，如果超过等待时间，则直接抛出JedisConnectionException；
-        config.setMaxWaitMillis (1000 * 100);
+        config.setMaxWaitMillis(1000 * 100);
         //在borrow一个jedis实例时，是否提前进行validate操作；如果为true，则得到的jedis实例均是可用的；
-        config.setTestOnBorrow (true);
-        config.setTestWhileIdle (true);
-        config.setTestOnReturn (false);
-        config.setTimeBetweenEvictionRunsMillis (30000);
-        config.setNumTestsPerEvictionRun (10);
-        config.setMinEvictableIdleTimeMillis (60000);
+        config.setTestOnBorrow(true);
+        config.setTestWhileIdle(true);
+        config.setTestOnReturn(false);
+        config.setTimeBetweenEvictionRunsMillis(30000);
+        config.setNumTestsPerEvictionRun(10);
+        config.setMinEvictableIdleTimeMillis(60000);
 
         //redis如果设置了密码：
             /*jedisPool = new JedisPool(config, JRedisPoolConfig.REDIS_IP,
@@ -92,7 +92,7 @@ public class JedisUtil {
         Jedis jedis = null;
         try {
             if (jedisPool != null) {
-                jedis = jedisPool.getResource ();
+                jedis = jedisPool.getResource();
                 return jedis;
             } else {
                 return null;
@@ -103,17 +103,17 @@ public class JedisUtil {
 
 // 获取连接失败时，应该返回给 jedisPool, 否则每次发生异常将导致一个 jedis 对象没有被回收
 
-                jedisPool.returnBrokenResource (jedis);
+                jedisPool.returnBrokenResource(jedis);
             }
 
-            e.printStackTrace ();
+            e.printStackTrace();
             return null;
         }
 
     }
 
 
-    private static final JedisUtil jedisUtil = new JedisUtil ();
+    private static final JedisUtil jedisUtil = new JedisUtil();
 
 
     /**
@@ -132,7 +132,7 @@ public class JedisUtil {
      */
     public void returnJedis(Jedis jedis) {
         if (null != jedis && null != jedisPool) {
-            jedisPool.returnResource (jedis);
+            jedisPool.returnResource(jedis);
         }
     }
 
@@ -143,7 +143,7 @@ public class JedisUtil {
      */
     public static void returnBrokenResource(Jedis jedis) {
         if (null != jedis && null != jedisPool) {
-            jedisPool.returnResource (jedis);
+            jedisPool.returnResource(jedis);
         }
     }
 
@@ -159,9 +159,9 @@ public class JedisUtil {
         if (seconds <= 0) {
             return;
         }
-        Jedis jedis = getJedis ();
-        jedis.expire (key, seconds);
-        returnJedis (jedis);
+        Jedis jedis = getJedis();
+        jedis.expire(key, seconds);
+        returnJedis(jedis);
     }
 
     /**
@@ -171,7 +171,7 @@ public class JedisUtil {
      * @author ruan 2013-4-11
      */
     public void expire(String key) {
-        expire (key, expire);
+        expire(key, expire);
     }
 
 
@@ -182,9 +182,9 @@ public class JedisUtil {
          * 清空所有key
          */
         public String flushAll() {
-            Jedis jedis = getJedis ();
-            String stata = jedis.flushAll ();
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            String stata = jedis.flushAll();
+            returnJedis(jedis);
             return stata;
         }
 
@@ -196,8 +196,8 @@ public class JedisUtil {
          * @return 状态码
          */
         public String rename(String oldkey, String newkey) {
-            return rename (SafeEncoder.encode (oldkey),
-                    SafeEncoder.encode (newkey));
+            return rename(SafeEncoder.encode(oldkey),
+                    SafeEncoder.encode(newkey));
         }
 
         /**
@@ -208,9 +208,9 @@ public class JedisUtil {
          * @return 状态码
          */
         public long renamenx(String oldkey, String newkey) {
-            Jedis jedis = getJedis ();
-            long status = jedis.renamenx (oldkey, newkey);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long status = jedis.renamenx(oldkey, newkey);
+            returnJedis(jedis);
             return status;
         }
 
@@ -222,9 +222,9 @@ public class JedisUtil {
          * @return 状态码
          */
         public String rename(byte[] oldkey, byte[] newkey) {
-            Jedis jedis = getJedis ();
-            String status = jedis.rename (oldkey, newkey);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            String status = jedis.rename(oldkey, newkey);
+            returnJedis(jedis);
             return status;
         }
 
@@ -236,9 +236,9 @@ public class JedisUtil {
          * @return 影响的记录数
          */
         public long expired(String key, int seconds) {
-            Jedis jedis = getJedis ();
-            long count = jedis.expire (key, seconds);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long count = jedis.expire(key, seconds);
+            returnJedis(jedis);
             return count;
         }
 
@@ -250,9 +250,9 @@ public class JedisUtil {
          * @return 影响的记录数
          */
         public long expireAt(String key, long timestamp) {
-            Jedis jedis = getJedis ();
-            long count = jedis.expireAt (key, timestamp);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long count = jedis.expireAt(key, timestamp);
+            returnJedis(jedis);
             return count;
         }
 
@@ -264,9 +264,9 @@ public class JedisUtil {
          */
         public long ttl(String key) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            long len = sjedis.ttl (key);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            long len = sjedis.ttl(key);
+            returnJedis(sjedis);
             return len;
         }
 
@@ -277,9 +277,9 @@ public class JedisUtil {
          * @return 影响的记录数
          */
         public long persist(String key) {
-            Jedis jedis = getJedis ();
-            long count = jedis.persist (key);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long count = jedis.persist(key);
+            returnJedis(jedis);
             return count;
         }
 
@@ -290,9 +290,9 @@ public class JedisUtil {
          * @return 删除的记录数
          */
         public long del(String... keys) {
-            Jedis jedis = getJedis ();
-            long count = jedis.del (keys);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long count = jedis.del(keys);
+            returnJedis(jedis);
             return count;
         }
 
@@ -303,9 +303,9 @@ public class JedisUtil {
          * @return 删除的记录数
          */
         public long del(byte[]... keys) {
-            Jedis jedis = getJedis ();
-            long count = jedis.del (keys);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long count = jedis.del(keys);
+            returnJedis(jedis);
             return count;
         }
 
@@ -317,9 +317,9 @@ public class JedisUtil {
          */
         public boolean exists(String key) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            boolean exis = sjedis.exists (key);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            boolean exis = sjedis.exists(key);
+            returnJedis(sjedis);
             return exis;
         }
 
@@ -331,9 +331,9 @@ public class JedisUtil {
          **/
         public List<String> sort(String key) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            List<String> list = sjedis.sort (key);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            List<String> list = sjedis.sort(key);
+            returnJedis(sjedis);
             return list;
         }
 
@@ -346,9 +346,9 @@ public class JedisUtil {
          **/
         public List<String> sort(String key, SortingParams parame) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            List<String> list = sjedis.sort (key, parame);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            List<String> list = sjedis.sort(key, parame);
+            returnJedis(sjedis);
             return list;
         }
 
@@ -360,9 +360,9 @@ public class JedisUtil {
          **/
         public String type(String key) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            String type = sjedis.type (key);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            String type = sjedis.type(key);
+            returnJedis(sjedis);
             return type;
         }
 
@@ -372,9 +372,9 @@ public class JedisUtil {
          * @param 'key的表达式,*表示多个，？表示一个
          */
         public Set<String> keys(String pattern) {
-            Jedis jedis = getJedis ();
-            Set<String> set = jedis.keys (pattern);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            Set<String> set = jedis.keys(pattern);
+            returnJedis(jedis);
             return set;
         }
     }
@@ -390,16 +390,16 @@ public class JedisUtil {
          * @return 操作码, 0或1
          */
         public long sadd(String key, String member) {
-            Jedis jedis = getJedis ();
-            long s = jedis.sadd (key, member);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long s = jedis.sadd(key, member);
+            returnJedis(jedis);
             return s;
         }
 
         public long sadd(byte[] key, byte[] member) {
-            Jedis jedis = getJedis ();
-            long s = jedis.sadd (key, member);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long s = jedis.sadd(key, member);
+            returnJedis(jedis);
             return s;
         }
 
@@ -411,9 +411,9 @@ public class JedisUtil {
          */
         public long scard(String key) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            long len = sjedis.scard (key);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            long len = sjedis.scard(key);
+            returnJedis(sjedis);
             return len;
         }
 
@@ -424,9 +424,9 @@ public class JedisUtil {
          * @return 差异的成员集合
          */
         public Set<String> sdiff(String... keys) {
-            Jedis jedis = getJedis ();
-            Set<String> set = jedis.sdiff (keys);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            Set<String> set = jedis.sdiff(keys);
+            returnJedis(jedis);
             return set;
         }
 
@@ -438,9 +438,9 @@ public class JedisUtil {
          * @return 新集合中的记录数
          **/
         public long sdiffstore(String newkey, String... keys) {
-            Jedis jedis = getJedis ();
-            long s = jedis.sdiffstore (newkey, keys);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long s = jedis.sdiffstore(newkey, keys);
+            returnJedis(jedis);
             return s;
         }
 
@@ -451,9 +451,9 @@ public class JedisUtil {
          * @return 交集成员的集合
          **/
         public Set<String> sinter(String... keys) {
-            Jedis jedis = getJedis ();
-            Set<String> set = jedis.sinter (keys);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            Set<String> set = jedis.sinter(keys);
+            returnJedis(jedis);
             return set;
         }
 
@@ -465,9 +465,9 @@ public class JedisUtil {
          * @return 新集合中的记录数
          **/
         public long sinterstore(String newkey, String... keys) {
-            Jedis jedis = getJedis ();
-            long s = jedis.sinterstore (newkey, keys);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long s = jedis.sinterstore(newkey, keys);
+            returnJedis(jedis);
             return s;
         }
 
@@ -480,9 +480,9 @@ public class JedisUtil {
          **/
         public boolean sismember(String key, String member) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            boolean s = sjedis.sismember (key, member);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            boolean s = sjedis.sismember(key, member);
+            returnJedis(sjedis);
             return s;
         }
 
@@ -494,17 +494,17 @@ public class JedisUtil {
          */
         public Set<String> smembers(String key) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            Set<String> set = sjedis.smembers (key);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            Set<String> set = sjedis.smembers(key);
+            returnJedis(sjedis);
             return set;
         }
 
         public Set<byte[]> smembers(byte[] key) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            Set<byte[]> set = sjedis.smembers (key);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            Set<byte[]> set = sjedis.smembers(key);
+            returnJedis(sjedis);
             return set;
         }
 
@@ -519,9 +519,9 @@ public class JedisUtil {
          * @return 状态码，1成功，0失败
          */
         public long smove(String srckey, String dstkey, String member) {
-            Jedis jedis = getJedis ();
-            long s = jedis.smove (srckey, dstkey, member);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long s = jedis.smove(srckey, dstkey, member);
+            returnJedis(jedis);
             return s;
         }
 
@@ -532,9 +532,9 @@ public class JedisUtil {
          * @return 被删除的成员
          */
         public String spop(String key) {
-            Jedis jedis = getJedis ();
-            String s = jedis.spop (key);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            String s = jedis.spop(key);
+            returnJedis(jedis);
             return s;
         }
 
@@ -546,9 +546,9 @@ public class JedisUtil {
          * @return 状态码，成功返回1，成员不存在返回0
          */
         public long srem(String key, String member) {
-            Jedis jedis = getJedis ();
-            long s = jedis.srem (key, member);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long s = jedis.srem(key, member);
+            returnJedis(jedis);
             return s;
         }
 
@@ -560,9 +560,9 @@ public class JedisUtil {
          * @see
          */
         public Set<String> sunion(String... keys) {
-            Jedis jedis = getJedis ();
-            Set<String> set = jedis.sunion (keys);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            Set<String> set = jedis.sunion(keys);
+            returnJedis(jedis);
             return set;
         }
 
@@ -573,9 +573,9 @@ public class JedisUtil {
          * @param keys   要合并的集合
          **/
         public long sunionstore(String newkey, String... keys) {
-            Jedis jedis = getJedis ();
-            long s = jedis.sunionstore (newkey, keys);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long s = jedis.sunionstore(newkey, keys);
+            returnJedis(jedis);
             return s;
         }
     }
@@ -592,9 +592,9 @@ public class JedisUtil {
          * @return 状态码 1成功，0已存在member的值
          */
         public long zadd(String key, double score, String member) {
-            Jedis jedis = getJedis ();
-            long s = jedis.zadd (key, score, member);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long s = jedis.zadd(key, score, member);
+            returnJedis(jedis);
             return s;
         }
 
@@ -613,9 +613,9 @@ public class JedisUtil {
          */
         public long zcard(String key) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            long len = sjedis.zcard (key);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            long len = sjedis.zcard(key);
+            returnJedis(sjedis);
             return len;
         }
 
@@ -628,9 +628,9 @@ public class JedisUtil {
          */
         public long zcount(String key, double min, double max) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            long len = sjedis.zcount (key, min, max);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            long len = sjedis.zcount(key, min, max);
+            returnJedis(sjedis);
             return len;
         }
 
@@ -642,8 +642,8 @@ public class JedisUtil {
          */
         public long zlength(String key) {
             long len = 0;
-            Set<String> set = zrange (key, 0, -1);
-            len = set.size ();
+            Set<String> set = zrange(key, 0, -1);
+            len = set.size();
             return len;
         }
 
@@ -656,9 +656,9 @@ public class JedisUtil {
          * @return 增后的权重
          */
         public double zincrby(String key, double score, String member) {
-            Jedis jedis = getJedis ();
-            double s = jedis.zincrby (key, score, member);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            double s = jedis.zincrby(key, score, member);
+            returnJedis(jedis);
             return s;
         }
 
@@ -672,9 +672,9 @@ public class JedisUtil {
          */
         public Set<String> zrange(String key, int start, int end) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            Set<String> set = sjedis.zrange (key, start, end);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            Set<String> set = sjedis.zrange(key, start, end);
+            returnJedis(sjedis);
             return set;
         }
 
@@ -688,9 +688,9 @@ public class JedisUtil {
          */
         public Set<String> zrangeByScore(String key, double min, double max) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            Set<String> set = sjedis.zrangeByScore (key, min, max);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            Set<String> set = sjedis.zrangeByScore(key, min, max);
+            returnJedis(sjedis);
             return set;
         }
 
@@ -704,9 +704,9 @@ public class JedisUtil {
          */
         public long zrank(String key, String member) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            long index = sjedis.zrank (key, member);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            long index = sjedis.zrank(key, member);
+            returnJedis(sjedis);
             return index;
         }
 
@@ -720,9 +720,9 @@ public class JedisUtil {
          */
         public long zrevrank(String key, String member) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            long index = sjedis.zrevrank (key, member);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            long index = sjedis.zrevrank(key, member);
+            returnJedis(sjedis);
             return index;
         }
 
@@ -734,9 +734,9 @@ public class JedisUtil {
          * @return 返回1成功
          */
         public long zrem(String key, String member) {
-            Jedis jedis = getJedis ();
-            long s = jedis.zrem (key, member);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long s = jedis.zrem(key, member);
+            returnJedis(jedis);
             return s;
         }
 
@@ -747,9 +747,9 @@ public class JedisUtil {
          * @return
          */
         public long zrem(String key) {
-            Jedis jedis = getJedis ();
-            long s = jedis.del (key);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long s = jedis.del(key);
+            returnJedis(jedis);
             return s;
         }
 
@@ -762,9 +762,9 @@ public class JedisUtil {
          * @return 删除的数量
          */
         public long zremrangeByRank(String key, int start, int end) {
-            Jedis jedis = getJedis ();
-            long s = jedis.zremrangeByRank (key, start, end);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long s = jedis.zremrangeByRank(key, start, end);
+            returnJedis(jedis);
             return s;
         }
 
@@ -777,9 +777,9 @@ public class JedisUtil {
          * @return 删除的数量
          */
         public long zremrangeByScore(String key, double min, double max) {
-            Jedis jedis = getJedis ();
-            long s = jedis.zremrangeByScore (key, min, max);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long s = jedis.zremrangeByScore(key, min, max);
+            returnJedis(jedis);
             return s;
         }
 
@@ -793,9 +793,9 @@ public class JedisUtil {
          */
         public Set<String> zrevrange(String key, int start, int end) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            Set<String> set = sjedis.zrevrange (key, start, end);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            Set<String> set = sjedis.zrevrange(key, start, end);
+            returnJedis(sjedis);
             return set;
         }
 
@@ -808,9 +808,9 @@ public class JedisUtil {
          */
         public double zscore(String key, String memebr) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            Double score = sjedis.zscore (key, memebr);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            Double score = sjedis.zscore(key, memebr);
+            returnJedis(sjedis);
             if (score != null)
                 return score;
             return 0;
@@ -828,16 +828,16 @@ public class JedisUtil {
          * @return 状态码，1成功，0失败
          */
         public long hdel(String key, String fieid) {
-            Jedis jedis = getJedis ();
-            long s = jedis.hdel (key, fieid);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long s = jedis.hdel(key, fieid);
+            returnJedis(jedis);
             return s;
         }
 
         public long hdel(String key) {
-            Jedis jedis = getJedis ();
-            long s = jedis.del (key);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long s = jedis.del(key);
+            returnJedis(jedis);
             return s;
         }
 
@@ -850,9 +850,9 @@ public class JedisUtil {
          */
         public boolean hexists(String key, String fieid) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            boolean s = sjedis.hexists (key, fieid);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            boolean s = sjedis.hexists(key, fieid);
+            returnJedis(sjedis);
             return s;
         }
 
@@ -865,17 +865,17 @@ public class JedisUtil {
          */
         public String hget(String key, String fieid) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            String s = sjedis.hget (key, fieid);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            String s = sjedis.hget(key, fieid);
+            returnJedis(sjedis);
             return s;
         }
 
         public byte[] hget(byte[] key, byte[] fieid) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            byte[] s = sjedis.hget (key, fieid);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            byte[] s = sjedis.hget(key, fieid);
+            returnJedis(sjedis);
             return s;
         }
 
@@ -883,13 +883,13 @@ public class JedisUtil {
          * 以Map的形式返回hash中的存储和值
          *
          * @param key
-         * @return Map<Strinig       ,       String>
+         * @return Map<Strinig                                                                                                                               ,                                                                                                                               String>
          */
         public Map<String, String> hgetAll(String key) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            Map<String, String> map = sjedis.hgetAll (key);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            Map<String, String> map = sjedis.hgetAll(key);
+            returnJedis(sjedis);
             return map;
         }
 
@@ -902,16 +902,16 @@ public class JedisUtil {
          * @return 状态码 1成功，0失败，fieid已存在将更新，也返回0
          **/
         public long hset(String key, String fieid, String value) {
-            Jedis jedis = getJedis ();
-            long s = jedis.hset (key, fieid, value);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long s = jedis.hset(key, fieid, value);
+            returnJedis(jedis);
             return s;
         }
 
         public long hset(String key, String fieid, byte[] value) {
-            Jedis jedis = getJedis ();
-            long s = jedis.hset (key.getBytes (), fieid.getBytes (), value);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long s = jedis.hset(key.getBytes(), fieid.getBytes(), value);
+            returnJedis(jedis);
             return s;
         }
 
@@ -924,9 +924,9 @@ public class JedisUtil {
          * @return 状态码 1成功，0失败fieid已存
          **/
         public long hsetnx(String key, String fieid, String value) {
-            Jedis jedis = getJedis ();
-            long s = jedis.hsetnx (key, fieid, value);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long s = jedis.hsetnx(key, fieid, value);
+            returnJedis(jedis);
             return s;
         }
 
@@ -938,9 +938,9 @@ public class JedisUtil {
          */
         public List<String> hvals(String key) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            List<String> list = sjedis.hvals (key);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            List<String> list = sjedis.hvals(key);
+            returnJedis(sjedis);
             return list;
         }
 
@@ -953,9 +953,9 @@ public class JedisUtil {
          * @return 增加指定数字后，存储位置的值
          */
         public long hincrby(String key, String fieid, long value) {
-            Jedis jedis = getJedis ();
-            long s = jedis.hincrBy (key, fieid, value);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long s = jedis.hincrBy(key, fieid, value);
+            returnJedis(jedis);
             return s;
         }
 
@@ -967,9 +967,9 @@ public class JedisUtil {
          */
         public Set<String> hkeys(String key) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            Set<String> set = sjedis.hkeys (key);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            Set<String> set = sjedis.hkeys(key);
+            returnJedis(sjedis);
             return set;
         }
 
@@ -981,9 +981,9 @@ public class JedisUtil {
          */
         public long hlen(String key) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            long len = sjedis.hlen (key);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            long len = sjedis.hlen(key);
+            returnJedis(sjedis);
             return len;
         }
 
@@ -996,17 +996,17 @@ public class JedisUtil {
          */
         public List<String> hmget(String key, String... fieids) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            List<String> list = sjedis.hmget (key, fieids);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            List<String> list = sjedis.hmget(key, fieids);
+            returnJedis(sjedis);
             return list;
         }
 
         public List<byte[]> hmget(byte[] key, byte[]... fieids) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            List<byte[]> list = sjedis.hmget (key, fieids);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            List<byte[]> list = sjedis.hmget(key, fieids);
+            returnJedis(sjedis);
             return list;
         }
 
@@ -1018,9 +1018,9 @@ public class JedisUtil {
          * @return 状态，成功返回OK
          */
         public String hmset(String key, Map<String, String> map) {
-            Jedis jedis = getJedis ();
-            String s = jedis.hmset (key, map);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            String s = jedis.hmset(key, map);
+            returnJedis(jedis);
             return s;
         }
 
@@ -1032,9 +1032,9 @@ public class JedisUtil {
          * @return 状态，成功返回OK
          */
         public String hmset(byte[] key, Map<byte[], byte[]> map) {
-            Jedis jedis = getJedis ();
-            String s = jedis.hmset (key, map);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            String s = jedis.hmset(key, map);
+            returnJedis(jedis);
             return s;
         }
 
@@ -1051,9 +1051,9 @@ public class JedisUtil {
          */
         public String get(String key) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            String value = sjedis.get (key);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            String value = sjedis.get(key);
+            returnJedis(sjedis);
             return value;
         }
 
@@ -1063,9 +1063,9 @@ public class JedisUtil {
          */
         public byte[] get(byte[] key) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            byte[] value = sjedis.get (key);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            byte[] value = sjedis.get(key);
+            returnJedis(sjedis);
             return value;
         }
 
@@ -1078,9 +1078,9 @@ public class JedisUtil {
          * @return String 操作状态
          */
         public String setEx(String key, int seconds, String value) {
-            Jedis jedis = getJedis ();
-            String str = jedis.setex (key, seconds, value);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            String str = jedis.setex(key, seconds, value);
+            returnJedis(jedis);
             return str;
         }
 
@@ -1093,9 +1093,9 @@ public class JedisUtil {
          * @return String 操作状态
          */
         public String setEx(byte[] key, int seconds, byte[] value) {
-            Jedis jedis = getJedis ();
-            String str = jedis.setex (key, seconds, value);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            String str = jedis.setex(key, seconds, value);
+            returnJedis(jedis);
             return str;
         }
 
@@ -1107,9 +1107,9 @@ public class JedisUtil {
          * @return long 状态码，1插入成功且key不存在，0未插入，key存在
          */
         public long setnx(String key, String value) {
-            Jedis jedis = getJedis ();
-            long str = jedis.setnx (key, value);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long str = jedis.setnx(key, value);
+            returnJedis(jedis);
             return str;
         }
 
@@ -1121,7 +1121,7 @@ public class JedisUtil {
          * @return 状态码
          */
         public String set(String key, String value) {
-            return set (SafeEncoder.encode (key), SafeEncoder.encode (value));
+            return set(SafeEncoder.encode(key), SafeEncoder.encode(value));
         }
 
         /**
@@ -1132,7 +1132,7 @@ public class JedisUtil {
          * @return 状态码
          */
         public String set(String key, byte[] value) {
-            return set (SafeEncoder.encode (key), value);
+            return set(SafeEncoder.encode(key), value);
         }
 
         /**
@@ -1143,9 +1143,9 @@ public class JedisUtil {
          * @return 状态码
          */
         public String set(byte[] key, byte[] value) {
-            Jedis jedis = getJedis ();
-            String status = jedis.set (key, value);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            String status = jedis.set(key, value);
+            returnJedis(jedis);
             return status;
         }
 
@@ -1160,9 +1160,9 @@ public class JedisUtil {
          * @return long value的长度
          */
         public long setRange(String key, long offset, String value) {
-            Jedis jedis = getJedis ();
-            long len = jedis.setrange (key, offset, value);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long len = jedis.setrange(key, offset, value);
+            returnJedis(jedis);
             return len;
         }
 
@@ -1174,9 +1174,9 @@ public class JedisUtil {
          * @return long 追加后value的长度
          **/
         public long append(String key, String value) {
-            Jedis jedis = getJedis ();
-            long len = jedis.append (key, value);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long len = jedis.append(key, value);
+            returnJedis(jedis);
             return len;
         }
 
@@ -1188,9 +1188,9 @@ public class JedisUtil {
          * @return long 减指定值后的值
          */
         public long decrBy(String key, long number) {
-            Jedis jedis = getJedis ();
-            long len = jedis.decrBy (key, number);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long len = jedis.decrBy(key, number);
+            returnJedis(jedis);
             return len;
         }
 
@@ -1203,9 +1203,9 @@ public class JedisUtil {
          * @return long 相加后的值
          */
         public long incrBy(String key, long number) {
-            Jedis jedis = getJedis ();
-            long len = jedis.incrBy (key, number);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long len = jedis.incrBy(key, number);
+            returnJedis(jedis);
             return len;
         }
 
@@ -1219,9 +1219,9 @@ public class JedisUtil {
          */
         public String getrange(String key, long startOffset, long endOffset) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            String value = sjedis.getrange (key, startOffset, endOffset);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            String value = sjedis.getrange(key, startOffset, endOffset);
+            returnJedis(sjedis);
             return value;
         }
 
@@ -1234,9 +1234,9 @@ public class JedisUtil {
          * @return String 原始value或null
          */
         public String getSet(String key, String value) {
-            Jedis jedis = getJedis ();
-            String str = jedis.getSet (key, value);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            String str = jedis.getSet(key, value);
+            returnJedis(jedis);
             return str;
         }
 
@@ -1247,9 +1247,9 @@ public class JedisUtil {
          * @return List<String> 值得集合
          */
         public List<String> mget(String... keys) {
-            Jedis jedis = getJedis ();
-            List<String> str = jedis.mget (keys);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            List<String> str = jedis.mget(keys);
+            returnJedis(jedis);
             return str;
         }
 
@@ -1260,9 +1260,9 @@ public class JedisUtil {
          * @return String 状态码
          */
         public String mset(String... keysvalues) {
-            Jedis jedis = getJedis ();
-            String str = jedis.mset (keysvalues);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            String str = jedis.mset(keysvalues);
+            returnJedis(jedis);
             return str;
         }
 
@@ -1273,9 +1273,9 @@ public class JedisUtil {
          * @return value值得长度
          */
         public long strlen(String key) {
-            Jedis jedis = getJedis ();
-            long len = jedis.strlen (key);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long len = jedis.strlen(key);
+            returnJedis(jedis);
             return len;
         }
     }
@@ -1290,7 +1290,7 @@ public class JedisUtil {
          * @return 长度
          */
         public long llen(String key) {
-            return llen (SafeEncoder.encode (key));
+            return llen(SafeEncoder.encode(key));
         }
 
         /**
@@ -1301,9 +1301,9 @@ public class JedisUtil {
          */
         public long llen(byte[] key) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            long count = sjedis.llen (key);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            long count = sjedis.llen(key);
+            returnJedis(sjedis);
             return count;
         }
 
@@ -1316,9 +1316,9 @@ public class JedisUtil {
          * @return 状态码
          */
         public String lset(byte[] key, int index, byte[] value) {
-            Jedis jedis = getJedis ();
-            String status = jedis.lset (key, index, value);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            String status = jedis.lset(key, index, value);
+            returnJedis(jedis);
             return status;
         }
 
@@ -1331,8 +1331,8 @@ public class JedisUtil {
          * @return 状态码
          */
         public String lset(String key, int index, String value) {
-            return lset (SafeEncoder.encode (key), index,
-                    SafeEncoder.encode (value));
+            return lset(SafeEncoder.encode(key), index,
+                    SafeEncoder.encode(value));
         }
 
         /**
@@ -1346,8 +1346,8 @@ public class JedisUtil {
          */
         public long linsert(String key, LIST_POSITION where, String pivot,
                             String value) {
-            return linsert (SafeEncoder.encode (key), where,
-                    SafeEncoder.encode (pivot), SafeEncoder.encode (value));
+            return linsert(SafeEncoder.encode(key), where,
+                    SafeEncoder.encode(pivot), SafeEncoder.encode(value));
         }
 
         /**
@@ -1361,9 +1361,9 @@ public class JedisUtil {
          */
         public long linsert(byte[] key, LIST_POSITION where, byte[] pivot,
                             byte[] value) {
-            Jedis jedis = getJedis ();
-            long count = jedis.linsert (key, where, pivot, value);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long count = jedis.linsert(key, where, pivot, value);
+            returnJedis(jedis);
             return count;
         }
 
@@ -1375,7 +1375,7 @@ public class JedisUtil {
          * @return 值
          **/
         public String lindex(String key, int index) {
-            return SafeEncoder.encode (lindex (SafeEncoder.encode (key), index));
+            return SafeEncoder.encode(lindex(SafeEncoder.encode(key), index));
         }
 
         /**
@@ -1387,9 +1387,9 @@ public class JedisUtil {
          **/
         public byte[] lindex(byte[] key, int index) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            byte[] value = sjedis.lindex (key, index);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            byte[] value = sjedis.lindex(key, index);
+            returnJedis(sjedis);
             return value;
         }
 
@@ -1400,7 +1400,7 @@ public class JedisUtil {
          * @return 移出的记录
          */
         public String lpop(String key) {
-            return SafeEncoder.encode (lpop (SafeEncoder.encode (key)));
+            return SafeEncoder.encode(lpop(SafeEncoder.encode(key)));
         }
 
         /**
@@ -1410,9 +1410,9 @@ public class JedisUtil {
          * @return 移出的记录
          */
         public byte[] lpop(byte[] key) {
-            Jedis jedis = getJedis ();
-            byte[] value = jedis.lpop (key);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            byte[] value = jedis.lpop(key);
+            returnJedis(jedis);
             return value;
         }
 
@@ -1423,9 +1423,9 @@ public class JedisUtil {
          * @return 移出的记录
          */
         public String rpop(String key) {
-            Jedis jedis = getJedis ();
-            String value = jedis.rpop (key);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            String value = jedis.rpop(key);
+            returnJedis(jedis);
             return value;
         }
 
@@ -1437,7 +1437,7 @@ public class JedisUtil {
          * @return 记录总数
          */
         public long lpush(String key, String value) {
-            return lpush (SafeEncoder.encode (key), SafeEncoder.encode (value));
+            return lpush(SafeEncoder.encode(key), SafeEncoder.encode(value));
         }
 
         /**
@@ -1448,9 +1448,9 @@ public class JedisUtil {
          * @return 记录总数
          */
         public long rpush(String key, String value) {
-            Jedis jedis = getJedis ();
-            long count = jedis.rpush (key, value);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long count = jedis.rpush(key, value);
+            returnJedis(jedis);
             return count;
         }
 
@@ -1462,9 +1462,9 @@ public class JedisUtil {
          * @return 记录总数
          */
         public long rpush(byte[] key, byte[] value) {
-            Jedis jedis = getJedis ();
-            long count = jedis.rpush (key, value);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long count = jedis.rpush(key, value);
+            returnJedis(jedis);
             return count;
         }
 
@@ -1476,9 +1476,9 @@ public class JedisUtil {
          * @return 记录总数
          */
         public long lpush(byte[] key, byte[] value) {
-            Jedis jedis = getJedis ();
-            long count = jedis.lpush (key, value);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long count = jedis.lpush(key, value);
+            returnJedis(jedis);
             return count;
         }
 
@@ -1492,9 +1492,9 @@ public class JedisUtil {
          */
         public List<String> lrange(String key, long start, long end) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            List<String> list = sjedis.lrange (key, start, end);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            List<String> list = sjedis.lrange(key, start, end);
+            returnJedis(sjedis);
             return list;
         }
 
@@ -1508,9 +1508,9 @@ public class JedisUtil {
          */
         public List<byte[]> lrange(byte[] key, int start, int end) {
             //ShardedJedis sjedis = getShardedJedis();
-            Jedis sjedis = getJedis ();
-            List<byte[]> list = sjedis.lrange (key, start, end);
-            returnJedis (sjedis);
+            Jedis sjedis = getJedis();
+            List<byte[]> list = sjedis.lrange(key, start, end);
+            returnJedis(sjedis);
             return list;
         }
 
@@ -1523,9 +1523,9 @@ public class JedisUtil {
          * @return 删除后的List中的记录数
          */
         public long lrem(byte[] key, int c, byte[] value) {
-            Jedis jedis = getJedis ();
-            long count = jedis.lrem (key, c, value);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            long count = jedis.lrem(key, c, value);
+            returnJedis(jedis);
             return count;
         }
 
@@ -1538,7 +1538,7 @@ public class JedisUtil {
          * @return 删除后的List中的记录数
          */
         public long lrem(String key, int c, String value) {
-            return lrem (SafeEncoder.encode (key), c, SafeEncoder.encode (value));
+            return lrem(SafeEncoder.encode(key), c, SafeEncoder.encode(value));
         }
 
         /**
@@ -1550,9 +1550,9 @@ public class JedisUtil {
          * @return 执行状态码
          */
         public String ltrim(byte[] key, int start, int end) {
-            Jedis jedis = getJedis ();
-            String str = jedis.ltrim (key, start, end);
-            returnJedis (jedis);
+            Jedis jedis = getJedis();
+            String str = jedis.ltrim(key, start, end);
+            returnJedis(jedis);
             return str;
         }
 
@@ -1565,22 +1565,22 @@ public class JedisUtil {
          * @return 执行状态码
          */
         public String ltrim(String key, int start, int end) {
-            return ltrim (SafeEncoder.encode (key), start, end);
+            return ltrim(SafeEncoder.encode(key), start, end);
         }
     }
 
     public static void main(String[] args) {
-        JedisUtil jedisUtil = JedisUtil.getInstance ();
+        JedisUtil jedisUtil = JedisUtil.getInstance();
         JedisUtil.Strings strings = jedisUtil.new Strings();
-        strings.set ("nnn", "nnnn");
+        strings.set("nnn", "nnnn");
 
-        Jedis jedis = JedisUtil.getInstance ().getJedis ();
+        Jedis jedis = JedisUtil.getInstance().getJedis();
         for (int i = 0; i < 10; i++) {
-            jedis.set ("test", "test");
-            System.out.println (i + "==" + jedis.get ("test"));
+            jedis.set("test", "test");
+            System.out.println(i + "==" + jedis.get("test"));
 
         }
-        JedisUtil.getInstance ().returnJedis (jedis);
+        JedisUtil.getInstance().returnJedis(jedis);
     }
 
 }

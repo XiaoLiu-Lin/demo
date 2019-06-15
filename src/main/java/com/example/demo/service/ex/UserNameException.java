@@ -1,8 +1,8 @@
 package com.example.demo.service.ex;
 
 /*
-* 用户注册异常，
-* */
+ * 用户注册异常，
+ * */
 public class UserNameException extends TestException {
 
 

@@ -1,9 +1,10 @@
 package com.example.demo.service.ex;
+
 /*
-* 测试异常类
-*拒绝访问是抛出什么
-* */
-public class TestException extends RuntimeException{
+ * 测试异常类
+ *拒绝访问是抛出什么
+ * */
+public class TestException extends RuntimeException {
 
 
     public TestException() {

@@ -17,19 +17,19 @@ public interface LoginService {
 
 
     /*
-    * 用户注册
-    * */
-    void  addUser2(Login login) throws UserNameException;
+     * 用户注册
+     * */
+    void addUser2(Login login) throws UserNameException;
 
 
     /**
-     *  根据用户id修改用户数据
-      */
-    Integer updateUser(Integer id ,Login login);
+     * 根据用户id修改用户数据
+     */
+    Integer updateUser(Integer id, Login login);
 
 
     /**
-     *  根据id查找用户是否存在
+     * 根据id查找用户是否存在
      */
     Login addId(Integer id);
 }

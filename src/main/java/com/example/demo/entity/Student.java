@@ -8,7 +8,6 @@ public class Student {
     private String name;
 
 
-
     public Integer getId() {
         return id;
     }

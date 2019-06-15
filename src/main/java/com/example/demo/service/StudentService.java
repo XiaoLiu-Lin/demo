@@ -19,5 +19,5 @@ public interface StudentService {
     public int delete(Integer id);
 
     //改
-    public int update( Integer id, Student student);
+    public int update(Integer id, Student student);
 }

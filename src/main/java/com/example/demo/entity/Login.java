@@ -11,7 +11,6 @@ public class Login {
     private Integer gender;
 
 
-
     public Integer getId() {
         return id;
     }

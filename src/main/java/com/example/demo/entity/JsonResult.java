@@ -2,9 +2,9 @@ package com.example.demo.entity;
 
 public class JsonResult {
 
-    private String status=null;
+    private String status = null;
 
-    private Object result=null;
+    private Object result = null;
 
     public JsonResult status(String status) {
         this.status = status;

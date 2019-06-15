@@ -32,5 +32,4 @@ public interface StudentMapper {
     public int update(@Param("id") Integer id, @Param("student") Student student);
 
 
-
 }
